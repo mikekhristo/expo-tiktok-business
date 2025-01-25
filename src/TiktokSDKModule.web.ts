@@ -1,14 +1,14 @@
-import { registerWebModule, NativeModule } from 'expo';
+import { registerWebModule, NativeModule } from "expo";
 
-import { TiktokSDKModuleEvents } from './TiktokSDK.types';
+import { TiktokSDKModuleEvents } from "./TiktokSDK.types";
 
 class TiktokSDKModule extends NativeModule<TiktokSDKModuleEvents> {
   PI = Math.PI;
   async setValueAsync(value: string): Promise<void> {
-    this.emit('onChange', { value });
+    this.emit("onChange", { value });
   }
   hello() {
-    return 'Hello world! 👋';
+    return "Hello world! 👋";
   }
 }
 

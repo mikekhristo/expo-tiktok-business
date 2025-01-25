@@ -1,6 +1,6 @@
-import { NativeModule, requireNativeModule } from 'expo';
+import { NativeModule, requireNativeModule } from "expo";
 
-import { TiktokSDKModuleEvents } from './TiktokSDK.types';
+import { TiktokSDKModuleEvents } from "./TiktokSDK.types";
 
 declare class TiktokSDKModule extends NativeModule<TiktokSDKModuleEvents> {
   PI: number;
@@ -9,4 +9,4 @@ declare class TiktokSDKModule extends NativeModule<TiktokSDKModuleEvents> {
 }
 
 // This call loads the native module object from the JSI.
-export default requireNativeModule<TiktokSDKModule>('TiktokSDK');
+export default requireNativeModule<TiktokSDKModule>("TiktokSDK");
