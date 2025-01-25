@@ -1,8 +1,6 @@
 {
   "platforms": [
-    "apple",
-    "android",
-    "web"
+    "apple"
   ],
   "apple": {
     "modules": [
