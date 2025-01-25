@@ -1,0 +1,10 @@
+{
+  "extends": "expo/tsconfig.base",
+  "compilerOptions": {
+    "strict": true,
+    "paths": {
+      "expo-tiktok-business-sdk": ["../src/index"],
+      "expo-tiktok-business-sdk/*": ["../src/*"]
+    }
+  }
+}
