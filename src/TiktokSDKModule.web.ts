@@ -3,12 +3,15 @@ import { registerWebModule, NativeModule } from "expo";
 import { TiktokSDKModuleEvents } from "./TiktokSDK.types";
 
 class TiktokSDKModule extends NativeModule<TiktokSDKModuleEvents> {
-  PI = Math.PI;
-  async setValueAsync(value: string): Promise<void> {
-    this.emit("onChange", { value });
+  initialize(appId: string, tiktokAppId: string): Promise<boolean> {
+    return Promise.resolve(false);
   }
-  hello() {
-    return "Hello world! 👋";
+
+  trackEvent(
+    eventName: string,
+    eventData: Record<string, any>
+  ): Promise<boolean> {
+    return Promise.resolve(false);
   }
 }
 

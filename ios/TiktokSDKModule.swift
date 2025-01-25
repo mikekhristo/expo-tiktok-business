@@ -1,4 +1,6 @@
 import ExpoModulesCore
+import TikTokBusinessSDK
+
 
 public class TiktokSDKModule: Module {
   // Each module class must implement the definition function. The definition consists of components
@@ -10,26 +12,26 @@ public class TiktokSDKModule: Module {
     // The module will be accessible from `requireNativeModule('TiktokSDK')` in JavaScript.
     Name("TiktokSDK")
 
-    // Sets constant properties on the module. Can take a dictionary or a closure that returns a dictionary.
-    Constants([
-      "PI": Double.pi
-    ])
-
-    // Defines event names that the module can send to JavaScript.
-    Events("onChange")
-
-    // Defines a JavaScript synchronous function that runs the native code on the JavaScript thread.
-    Function("hello") {
-      return "Hello world! 👋"
-    }
 
     // Defines a JavaScript function that always returns a Promise and whose native code
     // is by default dispatched on the different thread than the JavaScript runtime runs on.
-    AsyncFunction("setValueAsync") { (value: String) in
+    AsyncFunction("initialize") { (appId: String, tiktokAppId: String) in
       // Send an event to JavaScript.
-      self.sendEvent("onChange", [
-        "value": value
-      ])
+      let config = TikTokConfig.init(appId: appId, tiktokAppId: tiktokAppId)
+       TikTokBusiness.initializeSdk(config) { success, error in
+            if (!success) { // initialization failed
+                print(error!.localizedDescription)
+            } else { // initialization successful
+                
+            }
+        }
+      
+      return true
+    }
+
+    AsyncFunction("trackTTEvent") { (eventName: String, eventData: [String: Any]) in
+      TikTokBusiness.trackEvent(eventName, eventData)
+      return true
     }
 
     // Enables the module to be used as a native view. Definition components that are accepted as part of the
