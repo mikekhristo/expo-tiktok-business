@@ -22,7 +22,7 @@ public class TiktokSDKModule: Module {
             if (!success) { // initialization failed
                 print(error!.localizedDescription)
             } else { // initialization successful
-                
+                print("Tiktok SDK initialized")
             }
         }
       
