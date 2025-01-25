@@ -1,37 +1,18 @@
-import { useEvent } from "expo";
-import TiktokSDK, { TiktokSDKView } from "expo-tiktok-business-sdk";
-import { Button, SafeAreaView, ScrollView, Text, View } from "react-native";
+import TiktokSDK from "expo-tiktok-business-sdk";
+import { useEffect } from "react";
+import { SafeAreaView, ScrollView, Text, View } from "react-native";
 
 export default function App() {
-  const onChangePayload = useEvent(TiktokSDK, "onChange");
+  useEffect(() => {
+    TiktokSDK.initialize("appId", "tiktokAppId");
+  }, []);
 
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.container}>
         <Text style={styles.header}>Module API Example</Text>
         <Group name="Constants">
-          <Text>{TiktokSDK.PI}</Text>
-        </Group>
-        <Group name="Functions">
-          <Text>{TiktokSDK.hello()}</Text>
-        </Group>
-        <Group name="Async functions">
-          <Button
-            title="Set value"
-            onPress={async () => {
-              await TiktokSDK.setValueAsync("Hello from JS!");
-            }}
-          />
-        </Group>
-        <Group name="Events">
-          <Text>{onChangePayload?.value}</Text>
-        </Group>
-        <Group name="Views">
-          <TiktokSDKView
-            url="https://www.example.com"
-            onLoad={({ nativeEvent: { url } }) => console.log(`Loaded: ${url}`)}
-            style={styles.view}
-          />
+          <Text>Test of tiktok SDK</Text>
         </Group>
       </ScrollView>
     </SafeAreaView>

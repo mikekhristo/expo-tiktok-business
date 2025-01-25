@@ -29,8 +29,8 @@ public class TiktokSDKModule: Module {
       return true
     }
 
-    AsyncFunction("trackTTEvent") { (eventName: String, eventData: [String: Any]) in
-      TikTokBusiness.trackEvent(eventName, eventData)
+    AsyncFunction("trackEvent") { (eventName: String, eventData: [String: Any]) in
+      TikTokBusiness.trackEvent(eventName, withProperties: eventData)
       return true
     }
 
