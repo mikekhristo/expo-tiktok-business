@@ -16,13 +16,6 @@
       "supportsTablet": true,
       "bundleIdentifier": "expo.modules.tiktokbusinesssdk.example"
     },
-    "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      },
-      "package": "expo.modules.tiktokbusinesssdk.example"
-    },
     "web": {
       "favicon": "./assets/favicon.png"
     }
