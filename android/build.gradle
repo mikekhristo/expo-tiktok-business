@@ -41,3 +41,14 @@ android {
     abortOnError false
   }
 }
+
+repositories {
+  mavenCentral()
+  google()
+  maven { url 'https://artifact.bytedance.com/repository/pangle' }
+}
+
+dependencies {
+  // Add TikTok Business SDK dependency
+  implementation 'com.tiktok.sdk:business:2.1.0.4'
+}

@@ -3,3 +3,10 @@
 export { default } from "./TiktokSDKModule";
 export { default as TiktokSDKView } from "./TiktokSDKView";
 export * from "./TiktokSDK.types";
+
+// Export Expo Router integration utilities
+export { 
+  default as ExpoRouterIntegration,
+  useTiktokRouteTracking,
+  withTiktokRouteTracking
+} from "./ExpoRouterIntegration";
