@@ -22,11 +22,14 @@ public class TiktokSDKModule: Module {
         return false
       }
       
+      // Create config
       let config = TikTokConfig.init(appId: appId, tiktokAppId: tiktokAppId)
       
       // Set debug mode if specified
       if let debugMode = configDict["debugMode"] as? Bool, debugMode {
-        TikTokBusiness.setLogLevel(.debug)
+        // Safely unwrap the optional config before calling methods
+        config?.enableDebugMode()
+        config?.setLogLevel(TikTokLogLevel.TikTokLogLevelVerbose)
       }
       
       // Store auto-tracking preferences
@@ -38,20 +41,25 @@ public class TiktokSDKModule: Module {
         self.autoTrackRouteChanges = autoTrackRouteChanges
       }
       
-      // Initialize the SDK
-      TikTokBusiness.initializeSdk(config) { success, error in
-        if (!success) {
-          print("TikTok SDK initialization failed: \(error?.localizedDescription ?? "Unknown error")")
-        } else {
-          print("TikTok SDK initialized successfully")
-          
-          // Auto-track Launch event if enabled
-          if self.autoTrackAppLifecycle {
-            TikTokBusiness.trackEvent("Launch")
+      // Initialize the SDK - safely unwrap config
+      if let unwrappedConfig = config {
+        TikTokBusiness.initializeSdk(unwrappedConfig) { success, error in
+          if (!success) {
+            print("TikTok SDK initialization failed: \(error?.localizedDescription ?? "Unknown error")")
+          } else {
+            print("TikTok SDK initialized successfully")
+            
+            // Auto-track Launch event if enabled
+            if self.autoTrackAppLifecycle {
+              TikTokBusiness.trackEvent("Launch")
+            }
+            
+            self.isInitialized = true
           }
-          
-          self.isInitialized = true
         }
+      } else {
+        print("Error: TikTok SDK initialization failed - config is nil")
+        return false
       }
       
       return true
@@ -70,11 +78,10 @@ public class TiktokSDKModule: Module {
     
     // Set debug mode
     AsyncFunction("setDebugMode") { (enabled: Bool) in
-      if enabled {
-        TikTokBusiness.setLogLevel(.debug)
-      } else {
-        TikTokBusiness.setLogLevel(.info)
-      }
+      // Note: This function won't actually work after initialization,
+      // as debug mode must be set during SDK initialization.
+      // We'll keep it for backward compatibility but log a warning.
+      print("TikTok SDK: setDebugMode must be set during initialization. This call has no effect.")
       return true
     }
     
