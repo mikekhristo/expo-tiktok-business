@@ -1,4 +1,4 @@
-import { NativeModule, requireNativeModule } from "expo";
+import { NativeModulesProxy, EventEmitter } from 'expo-modules-core';
 import { AppStateStatus, AppState, Platform } from "react-native";
 import Constants from "expo-constants";
 
@@ -13,7 +13,7 @@ import {
 /**
  * Native module interface
  */
-declare class TiktokSDKModule extends NativeModule<TiktokSDKModuleEvents> {
+interface TiktokSDKModule {
   initialize(config: TiktokSDKConfig): Promise<boolean>;
   setDebugMode(enabled: boolean): Promise<boolean>;
   trackEvent(
@@ -27,7 +27,7 @@ declare class TiktokSDKModule extends NativeModule<TiktokSDKModuleEvents> {
 }
 
 // Get the native module
-const nativeModule = requireNativeModule<TiktokSDKModule>("TiktokSDK");
+const nativeModule = NativeModulesProxy.TiktokSDK as TiktokSDKModule;
 
 /**
  * TikTok Business SDK wrapper class

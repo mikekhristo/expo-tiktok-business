@@ -1,6 +1,6 @@
 {
   "name": "expo-tiktok-business",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A expo module for tiktok business sdk",
   "main": "build/index.js",
   "types": "build/index.d.ts",
@@ -44,7 +44,9 @@
   ],
   "license": "MIT",
   "homepage": "https://github.com/mikekhristo/expo-tiktok-business#readme",
-  "dependencies": {},
+  "dependencies": {
+    "expo-modules-core": "^1.5.11"
+  },
   "devDependencies": {
     "@types/react": "~18.3.12",
     "expo-module-scripts": "^4.0.3",
