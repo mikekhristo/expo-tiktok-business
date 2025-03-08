@@ -37,16 +37,14 @@
   "bugs": {
     "url": "https://github.com/mikekhristo/expo-tiktok-business/issues"
   },
-  "author": "YOUR_NAME <YOUR_EMAIL>",
+  "author": "Mike Khristo <mike@10xv.xyz> (https://github.com/mikekhristo)",
   "contributors": [
     "Mike Khristo <mike@10xv.xyz> (https://github.com/mikekhristo)",
     "Lior Levy <levy.lior.pro@gmail.com> (https://github.com/Lioruby)"
   ],
   "license": "MIT",
   "homepage": "https://github.com/mikekhristo/expo-tiktok-business#readme",
-  "dependencies": {
-    "expo-modules-core": "^1.5.11"
-  },
+  "dependencies": {},
   "devDependencies": {
     "@types/react": "~18.3.12",
     "expo-module-scripts": "^4.0.3",
