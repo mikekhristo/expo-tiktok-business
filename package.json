@@ -1,5 +1,5 @@
 {
-  "name": "expo-tiktok-business-sdk",
+  "name": "expo-tiktok-business",
   "version": "0.1.0",
   "description": "A expo module for tiktok business sdk",
   "main": "build/index.js",
@@ -18,16 +18,32 @@
   "keywords": [
     "react-native",
     "expo",
+    "expo-module",
     "expo-tiktok-business-sdk",
-    "TiktokSDK"
+    "expo-tiktok-business",
+    "tiktok",
+    "tiktok-ads",
+    "tiktok-sdk",
+    "tiktok-business",
+    "tiktok-events",
+    "analytics",
+    "tracking",
+    "conversions"
   ],
-  "repository": "https://github.com/Lioruby/expo-tiktok-business-sdk",
-  "bugs": {
-    "url": "https://github.com/Lioruby/expo-tiktok-business-sdk/issues"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mikekhristo/expo-tiktok-business.git"
   },
-  "author": "Lior Levy <levy.lior.pro@gmail.com> (https://github.com/Lioruby)",
+  "bugs": {
+    "url": "https://github.com/mikekhristo/expo-tiktok-business/issues"
+  },
+  "author": "YOUR_NAME <YOUR_EMAIL>",
+  "contributors": [
+    "Mike Khristo <mike@10xv.xyz> (https://github.com/mikekhristo)",
+    "Lior Levy <levy.lior.pro@gmail.com> (https://github.com/Lioruby)"
+  ],
   "license": "MIT",
-  "homepage": "https://github.com/Lioruby/expo-tiktok-business-sdk#readme",
+  "homepage": "https://github.com/mikekhristo/expo-tiktok-business#readme",
   "dependencies": {},
   "devDependencies": {
     "@types/react": "~18.3.12",
