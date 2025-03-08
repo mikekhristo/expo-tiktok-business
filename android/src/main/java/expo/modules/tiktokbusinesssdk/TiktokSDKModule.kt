@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.Log
 import com.tiktok.TikTokBusinessSdk
 import com.tiktok.TikTokBusinessSdk.TTConfig
+import com.tiktok.TikTokBusinessSdk.LogLevel
 import expo.modules.kotlin.modules.Module
 import expo.modules.kotlin.modules.ModuleDefinition
 import org.json.JSONObject
@@ -39,29 +40,50 @@ class TiktokSDKModule : Module() {
         // Configure debug mode
         val debugMode = config["debugMode"] as? Boolean ?: false
         
-        // Create TikTok SDK configuration
-        val ttConfig = TTConfig(context)
+        Log.i("TiktokSDK", "Initializing for android with appId=$appId, tiktokAppId=$tiktokAppId")
         
-        // Initialize the SDK
-        TikTokBusinessSdk.initializeSdk(ttConfig)
-        
-        // Set debug mode if enabled
-        if (debugMode) {
-          // The SDK doesn't have setLogLevel, so we'll use a different approach or skip this
-          // TikTokBusinessSdk.setLogLevel(TikTokBusinessSdk.LogLevel.DEBUG)
+        try {
+            // Create TikTok SDK configuration with all required parameters
+            val ttConfig = TTConfig(context)
+            
+            // Set app ID
+            Log.d("TiktokSDK", "Setting appId: $appId")
+            ttConfig.setAppId(appId)
+            
+            // Set TikTok app ID
+            Log.d("TiktokSDK", "Setting tiktokAppId: $tiktokAppId")
+            ttConfig.setTTAppId(tiktokAppId)
+            
+            // Set debug mode if enabled
+            if (debugMode) {
+                Log.d("TiktokSDK", "Setting debug mode")
+                ttConfig.setLogLevel(LogLevel.DEBUG)
+            }
+            
+            // Initialize the SDK
+            Log.d("TiktokSDK", "Calling initializeSdk")
+            TikTokBusinessSdk.initializeSdk(ttConfig)
+            
+            Log.i("TiktokSDK", "SDK initialized successfully")
+        } catch (e: Exception) {
+            Log.e("TiktokSDK", "Error during TTConfig setup: ${e.message}")
+            e.printStackTrace()
+            return@AsyncFunction false
         }
         
         // Auto-track Launch event if enabled
         if (autoTrackAppLifecycle) {
-          // The newer SDK version handles this automatically
+            Log.d("TiktokSDK", "Auto-tracking app lifecycle enabled")
+            // The newer SDK version handles this automatically
         }
         
         isInitialized = true
-        Log.i("TiktokSDK", "TikTok SDK initialized successfully")
+        Log.i("TiktokSDK", "TikTok SDK initialization complete")
         return@AsyncFunction true
         
       } catch (e: Exception) {
         Log.e("TiktokSDK", "Error initializing TikTok SDK: ${e.message}")
+        e.printStackTrace()
         return@AsyncFunction false
       }
     }
@@ -77,26 +99,34 @@ class TiktokSDKModule : Module() {
         // Convert Map to JSONObject for the SDK
         val jsonProps = if (eventData != null) JSONObject(eventData) else null
         
+        Log.d("TiktokSDK", "Tracking event: $eventName with props: $jsonProps")
+        
         // Log the event using the correct SDK method
         TikTokBusinessSdk.trackEvent(eventName, jsonProps)
         return@AsyncFunction true
         
       } catch (e: Exception) {
         Log.e("TiktokSDK", "Error tracking event: ${e.message}")
+        e.printStackTrace()
         return@AsyncFunction false
       }
     }
     
     // Set debug mode
     AsyncFunction("setDebugMode") { enabled: Boolean ->
-      // The SDK doesn't have setLogLevel, so we'll just return true
-      // TikTokBusinessSdk.setLogLevel(if (enabled) TikTokBusinessSdk.LogLevel.DEBUG else TikTokBusinessSdk.LogLevel.INFO)
+      // We can't set log level after initialization, so we'll just return true
+      Log.i("TiktokSDK", "setDebugMode called with enabled=$enabled (no-op after initialization)")
       return@AsyncFunction true
     }
     
     // Track route change for Expo Router integration
     AsyncFunction("trackRouteChange") { routeName: String, params: Map<String, Any>? ->
       if (!isInitialized || !autoTrackRouteChanges) {
+        if (!isInitialized) {
+          Log.w("TiktokSDK", "trackRouteChange: SDK not initialized")
+        } else {
+          Log.d("TiktokSDK", "trackRouteChange: auto tracking disabled")
+        }
         return@AsyncFunction false
       }
       
@@ -110,12 +140,15 @@ class TiktokSDKModule : Module() {
           jsonProps.put("screen_params", it.toString())
         }
         
+        Log.d("TiktokSDK", "Tracking route change to: $routeName with params: $jsonProps")
+        
         // Track the view content event with the correct method
         TikTokBusinessSdk.trackEvent("ViewContent", jsonProps)
         return@AsyncFunction true
         
       } catch (e: Exception) {
         Log.e("TiktokSDK", "Error tracking route change: ${e.message}")
+        e.printStackTrace()
         return@AsyncFunction false
       }
     }
