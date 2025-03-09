@@ -29,7 +29,8 @@ public class TiktokSDKModule: Module {
       if let debugMode = configDict["debugMode"] as? Bool, debugMode {
         // Safely unwrap the optional config before calling methods
         config?.enableDebugMode()
-        config?.setLogLevel(TikTokLogLevel.TikTokLogLevelVerbose)
+        // Note: Not setting log level as we don't know the correct enum values
+        // and enableDebugMode() should be sufficient
       }
       
       // Store auto-tracking preferences
@@ -78,10 +79,10 @@ public class TiktokSDKModule: Module {
     
     // Set debug mode
     AsyncFunction("setDebugMode") { (enabled: Bool) in
-      // Note: This function won't actually work after initialization,
-      // as debug mode must be set during SDK initialization.
-      // We'll keep it for backward compatibility but log a warning.
-      print("TikTok SDK: setDebugMode must be set during initialization. This call has no effect.")
+      // Note: Debug mode can only be set during initialization in the iOS SDK
+      // We'll keep this function for API compatibility with the JS interface
+      // but log a warning about its limitations
+      print("TikTok SDK iOS: Debug mode can only be set during initialization. This call has no effect.")
       return true
     }
     

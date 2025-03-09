@@ -14,7 +14,7 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "expo.modules.tiktokbusinesssdk.example"
+      "bundleIdentifier": "expo.modules.tiktokbusiness.example"
     },
     "web": {
       "favicon": "./assets/favicon.png"

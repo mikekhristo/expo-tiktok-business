@@ -1,4 +1,4 @@
-# expo-tiktok-business-sdk
+# expo-tiktok-business
 
 An Expo module for the TikTok Business SDK that helps you track events and conversions in your Expo app. This module supports iOS, Android, and has stub implementation for web.
 
@@ -16,13 +16,14 @@ An Expo module for the TikTok Business SDK that helps you track events and conve
 ### In managed Expo projects
 
 ```bash
-npx expo install expo-tiktok-business-sdk
+npx expo install expo-tiktok-business
 ```
 
 ### In bare React Native projects
 
 ```bash
-npm install expo-tiktok-business-sdk
+npm install expo-tiktok-business
+npx expo prebuild --clean
 ```
 
 #### Configure for iOS
@@ -35,29 +36,6 @@ npx pod-install
 
 ### Initialize the SDK
 
-```typescript
-import TiktokSDK, { TiktokEventName } from 'expo-tiktok-business-sdk';
-
-// In your app's entry point
-useEffect(() => {
-  // Basic initialization with same IDs for all platforms
-  TiktokSDK.initialize(
-    'com.yourcompany.yourapp', // Your app's bundle ID/package name
-    'YOUR_TIKTOK_APP_ID',      // TikTok App ID from Business Center
-    {
-      debugMode: __DEV__,           // Enable debug mode in development
-      autoTrackAppLifecycle: true,  // Automatically track app open/close
-      autoTrackRouteChanges: true,  // Automatically track screen views
-    }
-  );
-  
-  // Clean up when your app unmounts
-  return () => {
-    TiktokSDK.cleanup();
-  };
-}, []);
-```
-
 #### Platform-specific initialization
 
 TikTok often requires different App IDs for iOS and Android. You can provide platform-specific IDs:
@@ -66,7 +44,7 @@ TikTok often requires different App IDs for iOS and Android. You can provide pla
 // With platform-specific app IDs and TikTok App IDs
 TiktokSDK.initialize(
   {
-    ios: 'com.yourcompany.yourapp',      // iOS bundle ID
+    ios: 'APPLE_APP_ID',      // iOS app ID
     android: 'com.yourcompany.yourapp',  // Android package name
     default: 'com.yourcompany.yourapp'   // Fallback for other platforms
   },
@@ -118,7 +96,7 @@ TiktokSDK.trackCompletePurchase(
 ### Expo Router Integration
 
 ```typescript
-import { useTiktokRouteTracking } from 'expo-tiktok-business-sdk';
+import { useTiktokRouteTracking } from 'expo-tiktok-business';
 
 // In your app's root component
 export default function App() {
@@ -131,7 +109,7 @@ export default function App() {
 }
 
 // Alternatively, use the HOC
-import { withTiktokRouteTracking } from 'expo-tiktok-business-sdk';
+import { withTiktokRouteTracking } from 'expo-tiktok-business';
 
 const MyComponent = () => <View>...</View>;
 export default withTiktokRouteTracking(MyComponent);
@@ -141,7 +119,7 @@ For manual integration with Expo Router:
 
 ```typescript
 import { usePathname, useSearchParams } from 'expo-router';
-import { ExpoRouterIntegration } from 'expo-tiktok-business-sdk';
+import { ExpoRouterIntegration } from 'expo-tiktok-business';
 
 // In your app's root component
 useEffect(() => {
@@ -185,6 +163,25 @@ The module includes all standard TikTok events as enums:
 - `TiktokEventName.CONTACT` - User initiated contact
 - `TiktokEventName.CUSTOM` - Custom event
 
+## Credits and Contributions
+
+This module is based on the foundation work by [Lior Levy](https://github.com/Lioruby) from the original [expo-tiktok-business](https://github.com/Lioruby/expo-tiktok-business-sdk) project. We've extended it with:
+
+- Platform-specific app ID and TikTok app ID support
+- Enhanced event tracking with strongly-typed parameters
+- Automatic app lifecycle tracking
+- Expo Router integration
+- Debug mode support based on TikTok's documentation
+
+
+Special thanks to the original authors for providing the initial implementation.
+
+
+
 ## License
 
 MIT
+
+---
+
+*Generated with contributions from the community.*
