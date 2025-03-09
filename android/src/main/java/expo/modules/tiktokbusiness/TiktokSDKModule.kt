@@ -1,4 +1,4 @@
-package expo.modules.tiktokbusinesssdk
+package expo.modules.tiktokbusiness
 
 import android.content.Context
 import android.util.Log
@@ -10,17 +10,21 @@ import expo.modules.kotlin.modules.ModuleDefinition
 import org.json.JSONObject
 import java.net.URL
 
-class TiktokSDKModule : Module() {
+open class TiktokSDKModule : Module() {
   private var isInitialized = false
   private var autoTrackAppLifecycle = false
   private var autoTrackRouteChanges = false
   
   override fun definition() = ModuleDefinition {
+    Log.i("TiktokSDKModule", "definition() called - starting module registration")
     // Sets the name of the module that JavaScript code will use to refer to the module
     Name("TiktokSDK")
+    Log.i("TiktokSDKModule", "Module name set to TiktokSDK")
 
-    // Initialize TikTok Business SDK with configuration
+    // Log individual AsyncFunction registration for thorough traceability
+    Log.i("TiktokSDKModule", "Registering async function: initialize")
     AsyncFunction("initialize") { config: Map<String, Any> ->
+      Log.i("TiktokSDKModule", "AsyncFunction initialize called with config: $config")
       try {
         val appId = config["appId"] as? String
         val tiktokAppId = config["tiktokAppId"] as? String
@@ -31,7 +35,13 @@ class TiktokSDKModule : Module() {
         }
         
         // Get the application context
-        val context = appContext.reactContext?.applicationContext ?: return@AsyncFunction false
+        val context = appContext.reactContext?.applicationContext
+        if (context == null) {
+          Log.e("TiktokSDK", "Error: Application context is null")
+          return@AsyncFunction false
+        } else {
+          Log.i("TiktokSDK", "Application context obtained successfully")
+        }
         
         // Store auto-tracking preferences
         autoTrackAppLifecycle = config["autoTrackAppLifecycle"] as? Boolean ?: false
@@ -39,6 +49,7 @@ class TiktokSDKModule : Module() {
         
         // Configure debug mode
         val debugMode = config["debugMode"] as? Boolean ?: false
+        Log.i("TiktokSDK", "Debug mode: $debugMode")
         
         Log.i("TiktokSDK", "Initializing for android with appId=$appId, tiktokAppId=$tiktokAppId")
         
@@ -61,7 +72,7 @@ class TiktokSDKModule : Module() {
             }
             
             // Initialize the SDK
-            Log.d("TiktokSDK", "Calling initializeSdk")
+            Log.d("TiktokSDK", "Calling TikTokBusinessSdk.initializeSdk")
             TikTokBusinessSdk.initializeSdk(ttConfig)
             
             Log.i("TiktokSDK", "SDK initialized successfully")
@@ -71,10 +82,8 @@ class TiktokSDKModule : Module() {
             return@AsyncFunction false
         }
         
-        // Auto-track Launch event if enabled
         if (autoTrackAppLifecycle) {
             Log.d("TiktokSDK", "Auto-tracking app lifecycle enabled")
-            // The newer SDK version handles this automatically
         }
         
         isInitialized = true
@@ -153,14 +162,16 @@ class TiktokSDKModule : Module() {
       }
     }
 
-    // Enables the module to be used as a native view
+    // View registration logging
+    Log.i("TiktokSDKModule", "Registering native view: TiktokSDKView")
     View(TiktokSDKView::class) {
-      // Defines a setter for the `url` prop
       Prop("url") { view: TiktokSDKView, url: URL ->
+        Log.d("TiktokSDKModule", "Setting URL in native view: $url")
         view.webView.loadUrl(url.toString())
       }
-      // Defines an event that the view can send to JavaScript
       Events("onLoad")
     }
+    
+    Log.i("TiktokSDKModule", "Module registration complete")
   }
 }

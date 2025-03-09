@@ -10,7 +10,7 @@
   },
   "android": {
     "modules": [
-      "expo.modules.tiktokbusinesssdk.TiktokSDKModule"
+      "expo.modules.tiktokbusiness.TiktokSDK"
     ]
   }
 }

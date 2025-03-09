@@ -1,4 +1,4 @@
-import { NativeModulesProxy, EventEmitter } from 'expo-modules-core';
+import { requireNativeModule, EventEmitter } from 'expo-modules-core';
 import { AppStateStatus, AppState, Platform } from "react-native";
 import Constants from "expo-constants";
 
@@ -26,8 +26,22 @@ interface TiktokSDKModule {
   ): Promise<boolean>;
 }
 
-// Get the native module
-const nativeModule = NativeModulesProxy.TiktokSDK as TiktokSDKModule;
+// Create a getter function for the native module that will be called when needed
+const getNativeModule = (): TiktokSDKModule | null => {
+  try {
+    // Use the modern requireNativeModule approach instead of deprecated NativeModulesProxy
+    console.log('Attempting to load TiktokSDK native module...');
+    
+    const module = requireNativeModule('TiktokSDK');
+    console.log('TiktokSDK native module loaded:', module ? 'SUCCESS' : 'FAILED');
+    console.log('Platform:', Platform.OS);
+    
+    return module as TiktokSDKModule || null;
+  } catch (error) {
+    console.error('Error accessing TiktokSDK native module:', error);
+    return null;
+  }
+};
 
 /**
  * TikTok Business SDK wrapper class
@@ -158,15 +172,26 @@ class TiktokSDK {
     }
     
     // Initialize the native SDK
-    const success = await nativeModule.initialize(config);
-    this._isInitialized = success;
-    
-    // Set up app state change listener if lifecycle tracking is enabled
-    if (success && config.autoTrackAppLifecycle) {
-      this._setupAppStateListener();
+    const module = getNativeModule();
+    if (!module) {
+      console.error("TiktokSDK: Native module not available");
+      return false;
     }
     
-    return success;
+    try {
+      const success = await module.initialize(config) || false;
+      this._isInitialized = success;
+      
+      // Set up app state change listener if lifecycle tracking is enabled
+      if (success && config.autoTrackAppLifecycle) {
+        this._setupAppStateListener();
+      }
+      
+      return success;
+    } catch (error) {
+      console.error("TiktokSDK: Error initializing SDK", error);
+      return false;
+    }
   }
 
   /**
@@ -174,7 +199,18 @@ class TiktokSDK {
    * @param enabled Whether to enable debug mode
    */
   async setDebugMode(enabled: boolean): Promise<boolean> {
-    return nativeModule.setDebugMode(enabled);
+    const module = getNativeModule();
+    if (!module) {
+      console.error("TiktokSDK: Native module not available");
+      return false;
+    }
+    
+    try {
+      return await module.setDebugMode(enabled) || false;
+    } catch (error) {
+      console.error("TiktokSDK: Error setting debug mode", error);
+      return false;
+    }
   }
 
   /**
@@ -191,7 +227,18 @@ class TiktokSDK {
       return false;
     }
 
-    return nativeModule.trackEvent(eventName, eventParams);
+    const module = getNativeModule();
+    if (!module) {
+      console.error("TiktokSDK: Native module not available");
+      return false;
+    }
+    
+    try {
+      return await module.trackEvent(eventName, eventParams) || false;
+    } catch (error) {
+      console.error("TiktokSDK: Error tracking event", error);
+      return false;
+    }
   }
   
   /**
@@ -207,7 +254,18 @@ class TiktokSDK {
       return false;
     }
     
-    return nativeModule.trackRouteChange(routeName, params);
+    const module = getNativeModule();
+    if (!module) {
+      console.error("TiktokSDK: Native module not available");
+      return false;
+    }
+    
+    try {
+      return await module.trackRouteChange(routeName, params) || false;
+    } catch (error) {
+      console.error("TiktokSDK: Error tracking route change", error);
+      return false;
+    }
   }
   
   /**

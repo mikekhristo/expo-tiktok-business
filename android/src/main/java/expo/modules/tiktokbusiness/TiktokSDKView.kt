@@ -1,4 +1,4 @@
-package expo.modules.tiktokbusinesssdk
+package expo.modules.tiktokbusiness
 
 import android.content.Context
 import android.webkit.WebView
